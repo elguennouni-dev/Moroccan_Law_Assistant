@@ -13,8 +13,8 @@ import java.util.Map;
 @Service
 public class GeminiEmbeddingService {
 
-    // @Value("${gemini.api.key}")
-    private final String API_KEY = "AIzaSyAlEVn0rDmFrK59RJDTHgeum1rkprBHKE0";
+    @Value("${google.cloud.api.key}")
+    private String API_KEY;
     private final String URL = "https://generativelanguage.googleapis.com/v1beta/models/embedding-001:embedContent?key=" + API_KEY;
 
     public List<Double> getEmbedding(String text) {
