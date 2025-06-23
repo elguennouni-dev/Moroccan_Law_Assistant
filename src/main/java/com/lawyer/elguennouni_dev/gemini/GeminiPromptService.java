@@ -14,7 +14,9 @@ import java.util.Map;
 @Service
 public class GeminiPromptService {
 
-    private final String API_KEY = "AIzaSyAlEVn0rDmFrK59RJDTHgeum1rkprBHKE0";
+    @Value("${google.cloud.api.key}")
+    private String API_KEY;
+
     private final String URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=" + API_KEY;
 
     public String sendPrompt(String promptText) {
