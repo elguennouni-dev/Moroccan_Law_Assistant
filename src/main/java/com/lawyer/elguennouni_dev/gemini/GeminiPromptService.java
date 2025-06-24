@@ -17,9 +17,12 @@ public class GeminiPromptService {
     @Value("${google.cloud.api.key}")
     private String API_KEY;
 
-    private final String URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=" + API_KEY;
+    private final String URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=";
 
     public String sendPrompt(String promptText) {
+        System.out.println("API KEY : " + API_KEY);
+        System.out.println("API URL : " + URL+API_KEY);
+
         RestTemplate restTemplate = new RestTemplate();
 
         Map<String, Object> part = Map.of("text", promptText);
@@ -31,7 +34,7 @@ public class GeminiPromptService {
 
         HttpEntity<Map<String, Object>> entity = new HttpEntity<>(body, headers);
 
-        Map<String, Object> response = restTemplate.postForObject(URL, entity, Map.class);
+        Map<String, Object> response = restTemplate.postForObject(URL + API_KEY, entity, Map.class);
 
         if (response != null) {
             try {

@@ -15,9 +15,12 @@ public class GeminiEmbeddingService {
 
     @Value("${google.cloud.api.key}")
     private String API_KEY;
-    private final String URL = "https://generativelanguage.googleapis.com/v1beta/models/embedding-001:embedContent?key=" + API_KEY;
+    private final String URL = "https://generativelanguage.googleapis.com/v1beta/models/embedding-001:embedContent?key=";
 
     public List<Double> getEmbedding(String text) {
+        System.out.println("API KEY : " + API_KEY);
+        System.out.println("API URL : " + URL+API_KEY);
+
         RestTemplate restTemplate = new RestTemplate();
 
         Map<String, Object> content = Map.of("parts", List.of(Map.of("text", text)));
@@ -27,7 +30,7 @@ public class GeminiEmbeddingService {
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<Map<String, Object>> entity = new HttpEntity<>(body, headers);
 
-        Map<String, Object> response = restTemplate.postForObject(URL, entity, Map.class);
+        Map<String, Object> response = restTemplate.postForObject(URL+API_KEY, entity, Map.class);
 
         if (response != null && response.containsKey("embedding")) {
             Map<String, Object> embedding = (Map<String, Object>) response.get("embedding");

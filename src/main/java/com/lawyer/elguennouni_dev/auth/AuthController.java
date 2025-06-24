@@ -1,12 +1,11 @@
 package com.lawyer.elguennouni_dev.auth;
 
+import com.lawyer.elguennouni_dev.dao.RefreshTokenRequest;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -18,10 +17,29 @@ public class AuthController {
     private AuthService authService;
 
 
+    @PostMapping("/login")
+    public ResponseEntity<?> login() {
+        return null;
+    }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<?> refreshToken(@RequestBody RefreshTokenRequest request) {
+        return authService.refreshToken(request);
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(@RequestHeader("Authorization") String authHeader) {
+        return authService.logout(authHeader);
+    }
+
+    @GetMapping("/validate")
+    public ResponseEntity<?> validateToken(@RequestHeader("Authorization") String authHeader) {
+        return authService.validateToken(authHeader);
+    }
+
     @PostMapping("/signup")
     public ResponseEntity<?> signup(@RequestBody Map<String, String> body) {
-        authService.signupWithEmail(body.get("email"));
-        return ResponseEntity.ok("OTP sent to email");
+        return authService.signupWithEmail(body.get("email"));
     }
 
     @PostMapping("/verify")
