@@ -19,7 +19,7 @@ import java.util.function.Function;
 @Component
 public class JwtUtil {
 
-    @Value("${jwt.secret:SECRET_KEY}")
+    @Value("${jwt.secret}")
     private String secret;
 
     @Value("${jwt.expiration:864000000}")

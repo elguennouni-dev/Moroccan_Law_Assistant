@@ -1,9 +1,9 @@
 package com.lawyer.elguennouni_dev.auth;
 
+import com.lawyer.elguennouni_dev.dao.LoginRequest;
 import com.lawyer.elguennouni_dev.dao.RefreshTokenRequest;
-import org.apache.coyote.Response;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,17 +13,20 @@ import java.util.Map;
 @RequestMapping("/api/v1/auth")
 public class AuthController {
 
-    @Autowired
-    private AuthService authService;
+    private final AuthService authService;
 
+    @Autowired
+    public AuthController(AuthService authService) {
+        this.authService = authService;
+    }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login() {
-        return null;
+    public ResponseEntity<?> login(@Valid @RequestBody LoginRequest request) {
+        return authService.login(request);
     }
 
     @PostMapping("/refresh")
-    public ResponseEntity<?> refreshToken(@RequestBody RefreshTokenRequest request) {
+    public ResponseEntity<?> refreshToken(@Valid @RequestBody RefreshTokenRequest request) {
         return authService.refreshToken(request);
     }
 
@@ -38,15 +41,30 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<?> signup(@RequestBody Map<String, String> body) {
-        return authService.signupWithEmail(body.get("email"));
+    public ResponseEntity<?> signup(@RequestBody Map<String, String> requestBody) {
+        String email = extractEmail(requestBody);
+        return authService.signupWithEmail(email);
+    }
+
+    @PostMapping("/login/verify")
+    public ResponseEntity<?> verifyLogin(@RequestBody Map<String, String> requestBody) {
+        String email = extractEmail(requestBody);
+        String otp = extractOtp(requestBody);
+        return authService.verifyLogin(email, otp);
     }
 
     @PostMapping("/verify")
-    public ResponseEntity<?> verify(@RequestBody Map<String, String> body) {
-        boolean success = authService.verifyOtp(body.get("email"), body.get("otp"));
-        return success ? ResponseEntity.ok("Email verified") :
-                ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid OTP");
+    public ResponseEntity<?> verifyOtp(@RequestBody Map<String, String> requestBody) {
+        String email = extractEmail(requestBody);
+        String otp = extractOtp(requestBody);
+        return authService.verifyOtp(email, otp);
     }
 
+    private String extractEmail(Map<String, String> requestBody) {
+        return requestBody.get("email");
+    }
+
+    private String extractOtp(Map<String, String> requestBody) {
+        return requestBody.get("otp");
+    }
 }

@@ -3,6 +3,7 @@ package com.lawyer.elguennouni_dev.config;
 import com.lawyer.elguennouni_dev.entity.AppUser;
 import com.lawyer.elguennouni_dev.repository.AppUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -15,7 +16,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-@Service
+@Service("customUserDetailsService")
+@Primary
 public class CustomUserDetailsService implements UserDetailsService {
 
     @Autowired
